@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Stencils from './components/Stencils';
+import DrawingBoard from './components/DrawingBoard';
+
+import { ChakraProvider, Flex } from '@chakra-ui/react'
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import StencilsProperties from './components/StencilsProperties';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ChakraProvider>
+       <DndProvider backend={HTML5Backend}>
+        <Flex>
+          <Stencils ></Stencils>
+          <DrawingBoard>  </DrawingBoard>
+        
+           </Flex>
+       
+       </DndProvider>
+       </ChakraProvider>
     </div>
   );
 }
