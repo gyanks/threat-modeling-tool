@@ -1,4 +1,5 @@
 //import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 
 import { Box, Button, Table } from '@chakra-ui/react';
@@ -11,6 +12,7 @@ import { ItemTypes } from '../utility/Item';
 import StencilsOnBoard from './StencilsOnBoard';
 import DisplayAssets from './DisplayAssets';
 import AssetsList from './AssetsList';
+import findProjectThreats from '../service/ThreatService';
 
 const DrawingBoard = (props) => {
    localStorage.setItem("assets",JSON.stringify([]))
@@ -48,14 +50,73 @@ const DrawingBoard = (props) => {
 
  
 
-const displayAssets =() => {
-   setShow(true);
- 
- alert("show"+ show)
-  
-}
 
 
+const saveAssets = () => {
+
+      const projectName= window.prompt("Enter Project Name");
+      const assetsList= JSON.parse(localStorage.getItem("assets"))
+      const projectAssets={
+                            "projectName":projectName,
+                          "assets":assetsList 
+                          
+                          };
+      console.log("Saving project "+ JSON.stringify(projectAssets))
+      const url="https://k3qp4wwacb.execute-api.us-west-2.amazonaws.com/dev/assets";
+
+            fetch(url ,{
+              headers:{
+                'Content-Type' :"application/json"
+              },
+              mode:"no-cors",
+              method: "POST",
+                body: JSON.stringify(projectAssets)
+                }
+            ).then(res => res.json())
+            .then(data => console.log("save successfully "+ JSON.stringify(data)))
+            .catch( err=> console.log ("There is error while saving project assets  "+ err))
+      // finding all threats 
+
+      const allThreats= findProjectThreats(projectAssets);
+      const projectThreats= {
+                        "projectName": projectName,
+                          "threats" :allThreats
+                        }
+
+      
+      // saving threats to threatDb 
+      const threatUrl="https://k3qp4wwacb.execute-api.us-west-2.amazonaws.com/dev/threats"
+              fetch(threatUrl, {
+                headers:{
+                  'Content-Type' :"application/json"
+                },
+                mode:"no-cors",
+                method: "POST",
+                  body: JSON.stringify(projectThreats)
+                  })
+                  .then( response => response.json())
+                  .then(data => console.log ("Threats saved successfully to Database "+ JSON.stringify(data)))
+                  .catch(error => console.log("Error while saving threats in database "+ error))
+                /*
+                  const  assets1= assetsList.map(asset =>  {
+                         return {
+                          "id":asset.id,
+                          "assetName":asset.assetName,
+                          "assetType":asset.assetType,
+                          "assetProperty":asset.assetProperty.toString()
+                        }
+                     }) 
+                     alert(" Converted assets "+JSON.stringify(assets1))
+                     */
+                 // save in local storage 
+                  console.log ("Threats for all assets "+ JSON.stringify(projectThreats))
+                  localStorage.setItem("projectName",projectName);
+                  localStorage.setItem("myAssets", JSON.stringify(projectAssets))
+                  localStorage.setItem("threats",JSON.stringify(projectThreats))
+        
+                  alert("Assets saved successfully in database ")
+        setShow(true)
+    }
 
 
         return(
@@ -78,9 +139,9 @@ const displayAssets =() => {
              </div>
             </Box> 
             
-            <Button onClick={displayAssets}>Display Assets</Button>
-                
-                  {show & <AssetsList show="true" > </AssetsList>}
+            <Button onClick={saveAssets}>Save Project </Button>
+             <Link  to="report"> View Report</Link> 
+                  
             </div>
           )   
       

@@ -18,26 +18,28 @@ import {
   EditablePreview,
   Button,
 } from '@chakra-ui/react'
-import MaterialTable from 'material-table'
+
 import { Box,HStack, VStack,Container,Badge,Flex,Spacer} from '@chakra-ui/react'
 import StencilsProperties from './StencilsProperties'
 const StencilsOnBoard= (props) => {
 
   const [assetName,setAssetName] = useState();
   const [assetList,setAssetList] = useState();
-
+  const [assetId,setAssetId] = useState(1);
 
 const addAssetToList =() =>{
 
   const newAsset={
+    id: assetId,
     assetName:assetName,
     assetType:props.stencil.name,
-    assetsAttributes:props.stencil.attributes,
-    assetsProperties:" Confidentiality, Integrity, Availability" 
+    assetAttributes:props.stencil.attributes,
+    assetProperties:props.stencil.properties
   }
   const localList= JSON.parse(localStorage.getItem("assets"));
   const assetsList= [...localList,newAsset]
-
+  const newId= assetId +1;
+  setAssetId(newId)
   localStorage.setItem("assets",JSON.stringify(assetsList));
 
 }

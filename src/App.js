@@ -1,27 +1,27 @@
 
 import './App.css';
-import Stencils from './components/Stencils';
-import DrawingBoard from './components/DrawingBoard';
 
-import { ChakraProvider, Flex } from '@chakra-ui/react'
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
+import { Route,Routes } from 'react-router-dom';
 import StencilsProperties from './components/StencilsProperties';
-
+import { Amplify, Auth } from 'aws-amplify';
+import Report from './components/Report';
+import Drawing from './components/Drawing';
+import AssetsList from './components/AssetsList';
+import ThreatList from './components/ThreatList';
+//import awsconfig from './aws-exports';
+//Amplify.configure(awsconfig);
 
 function App() {
   return (
     <div className="App">
-      <ChakraProvider>
-       <DndProvider backend={HTML5Backend}>
-        <Flex>
-          <Stencils ></Stencils>
-          <DrawingBoard>  </DrawingBoard>
-        
-           </Flex>
-       
-       </DndProvider>
-       </ChakraProvider>
+      <Routes>
+      <Route path="/" element={ <Drawing />}/>
+      <Route path="report" element={<Report />}></Route>
+      <Route path="assets" element={ <AssetsList />} />
+      <Route path="threats" element= {<ThreatList />} />
+
+      </Routes>
+      
     </div>
   );
 }
