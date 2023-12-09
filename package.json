@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@aws-amplify/ui-react": "^4.3.4",
+    "@aws-amplify/ui-react": "^6.0.5",
     "@chakra-ui/react": "^2.4.8",
     "@emotion/react": "^11.10.5",
     "@mui/base": "^5.0.0-alpha.112",
